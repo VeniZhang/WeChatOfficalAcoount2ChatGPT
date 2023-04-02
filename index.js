@@ -16,9 +16,10 @@ const {
   AI_TYPE_IMAGE,
 } = require('./db');
 
-const {OPENAI_API_KEY=''} = process.env;
-
 const { sleep, strip } = require('./utils');
+  
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 
 const router = new Router();
 
@@ -31,7 +32,7 @@ const CLEAR_KEY_IMAGE = `${CLEAR_KEY}1`;
 
 const AI_IMAGE_KEY = '作画';
 
-const AI_THINKING_MESSAGE = '我已经在编了，请稍等几秒后复制原文再说一遍~';
+const AI_THINKING_MESSAGE = '我已经在编了，请稍等几秒后复制原文再说一遍~' + OPENAI_API_KEY + "key";
 
 const LIMIT_AI_TEXT_COUNT = 10;
 const LIMIT_AI_IMAGE_COUNT = 5;
@@ -71,7 +72,7 @@ async function getAIResponse(prompt) {
   });
 
   const response = (completion?.data?.choices?.[0].text || 'AI 挂了').trim();
-
+  console.log(response);
   return strip(response, ['\n', 'A: ']);
 }
 
@@ -223,7 +224,7 @@ router.post('/message/post', async ctx => {
 
   const message = await Promise.race([
     // 3秒微信服务器就会超时，超过2.8秒要提示用户重试
-    sleep(2800).then(() => AI_THINKING_MESSAGE),
+    // sleep(2800).then(() =>AI_THINKING_MESSAGE),
     getAIMessage({ Content, FromUserName }),
   ]);
 
@@ -283,7 +284,7 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-const port = process.env.PORT || 8;
+const port = process.env.PORT || 80;
 async function bootstrap() {
   await initDB();
 

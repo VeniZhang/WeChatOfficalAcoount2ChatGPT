@@ -1,3 +1,5 @@
+# 注意：
+openai 已被墙，暂时无法使用。
 # wxcloudrun-koa
 
 [![GitHub license](https://img.shields.io/github/license/WeixinCloud/wxcloudrun-koa)](https://github.com/WeixinCloud/wxcloudrun-koa)
